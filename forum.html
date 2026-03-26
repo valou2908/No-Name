@@ -7,42 +7,43 @@
 </head>
 <body>
 
-<header>
+<header class="header">
     <h1>Forum EcoApp</h1>
-    <p>Partagez vos idées, documents et images</p>
+    <p>Partagez vos idées, images et documents</p>
 </header>
 
-<main>
+<main class="container">
 
-    <h2>Publier un message</h2>
+    <section class="card">
+        <h2>Publier un message</h2>
 
-    <!-- Bouton pour ouvrir la zone mot de passe -->
-    <button class="forum-btn" onclick="ouvrirMdp()">Entrer le mot de passe</button>
+        <button class="btn" onclick="ouvrirMdp()">Entrer le mot de passe</button>
 
-    <!-- Zone mot de passe cachée -->
-    <div id="zone-mdp" style="display:none; margin-top:15px;">
-        <input type="password" id="mdp" placeholder="Mot de passe">
-        <button onclick="verifier()">Valider</button>
-    </div>
+        <div id="zone-mdp" style="display:none; margin-top:15px;">
+            <input type="password" id="mdp" placeholder="Mot de passe">
+            <button class="btn" onclick="verifier()">Valider</button>
+        </div>
 
-    <!-- Bouton publier (caché tant que mdp incorrect) -->
-    <div id="zone-publi" style="display:none; margin-top:20px;">
-        <a class="forum-btn" href="https://github.com/valou2908/EcoApp/issues" target="_blank">
-            ➜ Publier un message (texte + images + fichiers)
-        </a>
-    </div>
+        <div id="zone-publi" style="display:none; margin-top:20px;">
+            <a class="btn" href="https://github.com/valou2908/EcoApp/issues" target="_blank">
+                ➜ Publier un message
+            </a>
+        </div>
+    </section>
 
-    <h2>Derniers messages</h2>
-    <div id="issues"></div>
+    <section class="card">
+        <h2>Messages récents</h2>
+        <div id="issues"></div>
+    </section>
 
 </main>
 
-<footer>
-    <p>© 2024 – EcoApp</p>
+<footer class="footer">
+    © 2024 – EcoApp
 </footer>
 
 <script>
-const MDP = "EcoApp2024"; // 🔐 Ton mot de passe ici
+const MDP = "EcoApp2024";
 
 function ouvrirMdp() {
     document.getElementById("zone-mdp").style.display = "block";
@@ -52,7 +53,7 @@ function verifier() {
     const saisie = document.getElementById("mdp").value;
     if (saisie === MDP) {
         document.getElementById("zone-publi").style.display = "block";
-        alert("Mot de passe correct. Vous pouvez publier.");
+        alert("Mot de passe correct.");
     } else {
         alert("Mot de passe incorrect.");
     }
@@ -71,7 +72,6 @@ async function chargerIssues() {
             <div class="post">
                 <h3>${issue.title}</h3>
                 <p>${issue.body}</p>
-                <a href="${issue.html_url}" target="_blank">Voir / Répondre</a>
             </div>
         `;
     });
