@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>EcoApp – Forum</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Ajout pour afficher les retours à la ligne */
+        .post p {
+            white-space: pre-wrap;
+        }
+    </style>
 </head>
 <body>
 
@@ -68,10 +75,13 @@ async function chargerIssues() {
     zone.innerHTML = "";
 
     issues.forEach(issue => {
+        // Conversion des sauts de ligne
+        const body = issue.body ? issue.body.replace(/\n/g, "<br>") : "";
+
         zone.innerHTML += `
             <div class="post">
                 <h3>${issue.title}</h3>
-                <p>${issue.body}</p>
+                <p>${body}</p>
             </div>
         `;
     });
