@@ -2,14 +2,11 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoApp – Forum</title>
     <link rel="stylesheet" href="style.css">
-
     <style>
-        /* Ajout pour afficher les retours à la ligne */
-        .post p {
-            white-space: pre-wrap;
-        }
+        .post p { white-space: pre-wrap; }
     </style>
 </head>
 <body>
@@ -20,37 +17,39 @@
 </header>
 
 <main class="container">
-
     <section class="card">
         <h2>Publier un message</h2>
-
         <button class="btn" onclick="ouvrirMdp()">Entrer le mot de passe</button>
 
         <div id="zone-mdp" style="display:none; margin-top:15px;">
-            <input type="password" id="mdp" placeholder="Mot de passe">
+            <input type="password" id="mdp" placeholder="Mot de passe" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
             <button class="btn" onclick="verifier()">Valider</button>
         </div>
 
         <div id="zone-publi" style="display:none; margin-top:20px;">
             <a class="btn" href="https://github.com/valou2908/EcoApp/issues" target="_blank">
-                ➜ Publier un message
+                ➜ Créer un post sur GitHub
             </a>
         </div>
     </section>
 
     <section class="card">
         <h2>Messages récents</h2>
-        <div id="issues"></div>
+        <div id="issues">Chargement des messages...</div>
     </section>
-
 </main>
 
 <footer class="footer">
     © 2024 – EcoApp
 </footer>
 
+<nav class="nav-mobile">
+    <a href="index.html" class="nav-item">🏠 Accueil</a>
+    <a href="forum.html" class="nav-item active">💬 Forum</a>
+</nav>
+
 <script>
-const MDP = "EcoApp2024";
+const MDP = "EcoApp2024"; //
 
 function ouvrirMdp() {
     document.getElementById("zone-mdp").style.display = "block";
@@ -60,31 +59,39 @@ function verifier() {
     const saisie = document.getElementById("mdp").value;
     if (saisie === MDP) {
         document.getElementById("zone-publi").style.display = "block";
-        alert("Mot de passe correct.");
+        alert("Accès autorisé.");
     } else {
         alert("Mot de passe incorrect.");
     }
 }
 
 async function chargerIssues() {
-    const url = "https://api.github.com/repos/valou2908/EcoApp/issues";
-    const res = await fetch(url);
-    const issues = await res.json();
+    try {
+        const url = "https://api.github.com/repos/valou2908/EcoApp/issues";
+        const res = await fetch(url);
+        const issues = await res.json();
 
-    const zone = document.getElementById("issues");
-    zone.innerHTML = "";
+        const zone = document.getElementById("issues");
+        zone.innerHTML = "";
 
-    issues.forEach(issue => {
-        // Conversion des sauts de ligne
-        const body = issue.body ? issue.body.replace(/\n/g, "<br>") : "";
+        if(issues.length === 0) {
+            zone.innerHTML = "<p>Aucun message pour le moment.</p>";
+            return;
+        }
 
-        zone.innerHTML += `
-            <div class="post">
-                <h3>${issue.title}</h3>
-                <p>${body}</p>
-            </div>
-        `;
-    });
+        issues.forEach(issue => {
+            const body = issue.body ? issue.body.replace(/\n/g, "<br>") : "Pas de contenu.";
+            zone.innerHTML += `
+                <div class="post">
+                    <h3>${issue.title}</h3>
+                    <p>${body}</p>
+                    <small>Par: ${issue.user.login}</small>
+                </div>
+            `;
+        });
+    } catch (error) {
+        document.getElementById("issues").innerHTML = "Erreur de chargement.";
+    }
 }
 
 chargerIssues();
