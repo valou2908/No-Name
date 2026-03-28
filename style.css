@@ -1,68 +1,151 @@
-/* --- Base Commune --- */
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f4f0;
-    color: #2c3e50;
+/* --- VARIABLES ET RESET --- */
+:root {
+    --primary: #2e7d32;
+    --primary-hover: #1b5e20;
+    --bg-color: #f3f7f3;
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* --- HEADER ET FOOTER --- */
 .header {
-    background: #2e7d32;
+    background: var(--primary);
     color: white;
     text-align: center;
     padding: 40px 20px;
 }
 
+.footer {
+    text-align: center;
+    padding: 30px;
+    background: var(--primary);
+    color: white;
+    margin-top: 50px;
+}
+
+/* --- MISE EN PAGE (CONTAINER) --- */
 .container {
-    width: 95%;
-    max-width: 1200px;
-    margin: 20px auto;
-    display: grid; /* Utilisation de Grid pour le PC */
-    gap: 20px;
+    width: 90%;
+    max-width: 1000px;
+    margin: 30px auto;
 }
 
+/* --- CARTES ET ÉLÉMENTS --- */
 .card {
-    background: white;
+    background: var(--card-bg);
     padding: 25px;
+    margin-bottom: 25px;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow);
 }
 
-/* --- ADAPTATION TÉLÉPHONE --- */
+.btn {
+    display: inline-block;
+    background: var(--primary);
+    color: white !important;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background: var(--primary-hover);
+}
+
+.post {
+    background: #e8f5e9;
+    padding: 20px;
+    margin: 15px 0;
+    border-left: 5px solid var(--primary);
+    border-radius: 6px;
+}
+
+.post h3 {
+    margin-top: 0;
+    color: var(--primary);
+}
+
+/* --- NAVIGATION MOBILE (BARRE DU BAS) --- */
+.nav-mobile {
+    display: none; /* Caché par défaut sur PC */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    justify-content: space-around;
+    padding: 12px 0;
+    z-index: 1000;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
+
+/* --- ADAPTATION TÉLÉPHONE (MOBILE) --- */
 @media (max-width: 768px) {
-    .header h1 { font-size: 1.5rem; }
-    
-    /* Navigation simplifiée en bas pour le pouce */
-    .nav-mobile {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: white;
-        display: flex;
-        justify-content: space-around;
-        padding: 10px;
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        z-index: 1000;
+    .container {
+        width: 95%;
+        margin: 15px auto 80px auto; /* Marge en bas pour ne pas cacher le contenu sous la nav */
     }
-    
-    .container { margin-bottom: 80px; } /* Espace pour la barre du bas */
-    
-    .btn { width: 100%; text-align: center; box-sizing: border-box; }
+
+    .header {
+        padding: 25px 15px;
+    }
+
+    .header h1 {
+        font-size: 1.8rem;
+    }
+
+    .nav-mobile {
+        display: flex; /* Affiché uniquement sur mobile */
+    }
+
+    .btn {
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
 }
 
-/* --- ADAPTATION PC --- */
+/* --- ADAPTATION PC (DESKTOP) --- */
 @media (min-width: 769px) {
-    .container {
-        grid-template-columns: 1fr 2fr; /* Colonne gauche pour infos, droite pour forum */
+    /* Sur PC, on peut mettre les posts en deux colonnes si on veut */
+    #issues {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
     }
     
-    .header { padding: 60px 20px; }
-    
-    .nav-mobile { display: none; } /* On cache la barre mobile */
-    
-    .post:hover {
-        transform: scale(1.02);
-        transition: 0.3s;
+    .post {
+        margin: 0;
     }
 }
