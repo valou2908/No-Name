@@ -92,14 +92,19 @@ async function chargerIssues() {
         }
 
         issues.forEach(issue => {
-            // Nettoyage simple du texte
-            const body = issue.body ? issue.body.replace(/\n/g, "<br>") : "Pas de texte.";
+            let body = issue.body || "Pas de texte.";
+
+            // FIX : Transforme le Markdown ![alt](url) en <img src="url">
+            body = body.replace(/!\[.*?\]\((.*?)\)/g, '<img src="$1" style="max-width:100%; border-radius:10px; margin-top:10px;">');
+            
+            // Remplace les retours à la ligne par des balises <br>
+            body = body.replace(/\n/g, "<br>");
 
             zone.innerHTML += `
-                <div class="post">
-                    <h3>${issue.title}</h3>
-                    <p>${body}</p>
-                    <small>Posté par : ${issue.user.login}</small>
+                <div class="post" style="border-bottom: 1px solid #eee; padding: 15px 0;">
+                    <h3 style="color: #2e7d32;">${issue.title}</h3>
+                    <div class="post-content">${body}</div>
+                    <small style="color: #666;">Posté par : <strong>${issue.user.login}</strong></small>
                 </div>
             `;
         });
@@ -107,7 +112,6 @@ async function chargerIssues() {
         document.getElementById("issues").innerHTML = "Erreur lors du chargement des messages.";
     }
 }
-
 chargerIssues();
 </script>
 
