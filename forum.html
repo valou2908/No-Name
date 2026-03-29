@@ -4,51 +4,204 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoApp – Forum</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
-        /* Correction des fenêtres disproportionnées */
+        :root {
+            --primary: #2e7d32;
+            --primary-hover: #1b5e20;
+            --bg-color: #f3f7f3;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-pc {
+            background: #1b5e20;
+            text-align: center;
+            padding: 15px 0;
+        }
+        .nav-pc a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: var(--primary);
+            color: white;
+            margin-top: 50px;
+        }
+
         .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 10px;
+            width: 95%;
+            max-width: 1000px;
+            margin: 30px auto;
         }
+
         .card {
-            background: white;
-            padding: 20px;
+            background: var(--card-bg);
+            padding: 25px;
+            margin-bottom: 25px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            overflow: hidden; /* Empêche le contenu de dépasser */
+            box-shadow: var(--shadow);
+            overflow: hidden;
         }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white !important;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn:hover { background: var(--primary-hover); }
+
+        /* --- STYLE DES MESSAGES (Correction disproportion) --- */
+        #issues {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
         .post {
-            border-bottom: 1px solid #eee;
-            padding: 20px 0;
-            word-wrap: break-word; /* Force le texte trop long à aller à la ligne */
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 5px solid var(--primary);
+            border-radius: 8px;
+            word-wrap: break-word; /* Empêche le texte de dépasser */
+            overflow-wrap: break-word;
         }
-        .post img {
-            max-width: 100%; /* L'image ne dépassera jamais de la fenêtre */
+
+        .post h3 { margin-top: 0; color: var(--primary); }
+
+        .post-content img {
+            max-width: 100%; /* L'image s'adapte à la largeur du message */
             height: auto;
             border-radius: 8px;
-            display: block;
             margin: 10px 0;
+            display: block;
         }
-        /* Style pour les liens pour qu'ils ne cassent pas le design */
-        .post a {
-            color: #2e7d32;
-            word-break: break-all;
+
+        /* --- NAVIGATION MOBILE --- */
+        .nav-mobile {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 1000;
+        }
+
+        /* --- ADAPTATION ECRANS --- */
+        @media (max-width: 768px) {
+            .nav-pc { display: none; }
+            .nav-mobile { display: flex; }
+            body { padding-bottom: 80px; }
+            .btn { display: block; width: 100%; text-align: center; }
+        }
+
+        @media (min-width: 769px) {
+            #issues {
+                display: grid;
+                grid-template-columns: 1fr 1fr; /* 2 colonnes sur PC */
+            }
         }
     </style>
 </head>
 <body>
 
+<nav class="nav-pc">
+    <a href="index.html">Accueil</a>
+    <a href="forum.html">Forum</a>
+</nav>
+
+<header class="header">
+    <h1>Forum EcoApp</h1>
+    <p>Partagez vos idées et images via GitHub</p>
+</header>
+
 <main class="container">
+    <section class="card">
+        <h2>Publier un message</h2>
+        <button class="btn" onclick="ouvrirMdp()">Entrer le mot de passe</button>
+
+        <div id="zone-mdp" style="display:none; margin-top:15px;">
+            <input type="password" id="mdp" placeholder="Mot de passe" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 200px;">
+            <button class="btn" onclick="verifier()">Valider</button>
+        </div>
+
+        <div id="zone-publi" style="display:none; margin-top:20px;">
+            <a class="btn" href="https://github.com/valou2908/EcoApp/issues" target="_blank">
+                ➜ Créer un post sur GitHub
+            </a>
+        </div>
+    </section>
+
     <section class="card">
         <h2>Messages récents</h2>
         <div id="issues">Chargement des messages...</div>
     </section>
 </main>
 
+<footer class="footer">
+    © 2026 – EcoApp
+</footer>
+
+<nav class="nav-mobile">
+    <a href="index.html" style="text-decoration:none;">🏠 Accueil</a>
+    <a href="forum.html" style="text-decoration:none; color:var(--primary); font-weight:bold;">💬 Forum</a>
+</nav>
+
 <script>
+const MDP = "EcoApp2024";
+
+function ouvrirMdp() {
+    document.getElementById("zone-mdp").style.display = "block";
+}
+
+function verifier() {
+    const saisie = document.getElementById("mdp").value;
+    if (saisie === MDP) {
+        document.getElementById("zone-publi").style.display = "block";
+        document.getElementById("zone-mdp").style.display = "none";
+        alert("Accès autorisé !");
+    } else {
+        alert("Mot de passe incorrect.");
+    }
+}
+
 async function chargerIssues() {
     try {
         const url = "https://api.github.com/repos/valou2908/EcoApp/issues";
@@ -64,23 +217,25 @@ async function chargerIssues() {
         }
 
         issues.forEach(issue => {
-            // Utilisation de marked.parse pour transformer le Markdown en HTML complet
-            // Cela gère les images, les liens, les listes, etc.
-            const contentHTML = marked.parse(issue.body || "Pas de texte.");
+            // Utilisation de Marked pour transformer le texte GitHub en HTML
+            const bodyHtml = marked.parse(issue.body || "Pas de texte.");
 
             zone.innerHTML += `
                 <div class="post">
-                    <h3 style="color: #2e7d32; margin-top:0;">${issue.title}</h3>
-                    <div class="post-content">${contentHTML}</div>
-                    <small style="color: #666;">Posté par : <strong>${issue.user.login}</strong></small>
+                    <h3>${issue.title}</h3>
+                    <div class="post-content">${bodyHtml}</div>
+                    <hr style="border:0; border-top:1px solid #ccc; margin:10px 0;">
+                    <small>Par : <strong>${issue.user.login}</strong></small>
                 </div>
             `;
         });
     } catch (e) {
-        document.getElementById("issues").innerHTML = "Erreur lors du chargement des messages.";
+        document.getElementById("issues").innerHTML = "Erreur de connexion aux messages.";
     }
 }
+
 chargerIssues();
 </script>
+
 </body>
 </html>
