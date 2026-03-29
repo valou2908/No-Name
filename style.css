@@ -1,167 +1,287 @@
 :root {
+
     --primary: #2e7d32;
+
     --primary-hover: #1b5e20;
+
     --bg-color: #f3f7f3;
+
     --card-bg: #ffffff;
+
     --text-color: #333;
-    --shadow: 0 4px 12px rgba(0,0,0,0.08);
-    --border-radius: 15px;
+
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
+
 }
+
+
 
 * { box-sizing: border-box; }
 
+
+
 body {
+
     margin: 0;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+    font-family: 'Segoe UI', Arial, sans-serif;
+
     background: var(--bg-color);
+
     color: var(--text-color);
+
     line-height: 1.6;
+
 }
 
-/* --- NAVIGATION PC --- */
+
+
+/* --- NAVIGATION PC (Nouveau) --- */
+
 .nav-pc {
+
     background: #1b5e20;
+
     text-align: center;
-    padding: 15px 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+
+    padding: 10px 0;
+
 }
+
+
 
 .nav-pc a {
+
     color: white;
+
     text-decoration: none;
-    margin: 0 20px;
-    font-weight: 600;
-    transition: opacity 0.3s;
+
+    margin: 0 15px;
+
+    font-weight: bold;
+
 }
 
-.nav-pc a:hover { opacity: 0.8; }
 
-/* --- HEADER --- */
+
+/* --- HEADER ET FOOTER --- */
+
 .header {
-    background: linear-gradient(135deg, var(--primary), #4caf50);
+
+    background: var(--primary);
+
     color: white;
+
     text-align: center;
-    padding: 60px 20px;
-    margin-bottom: 20px;
+
+    padding: 40px 20px;
+
 }
 
-/* --- CONTAINER & CARDS --- */
-.container {
-    width: 95%;
-    max-width: 1100px;
-    margin: 0 auto;
+
+
+.footer {
+
+    text-align: center;
+
+    padding: 30px;
+
+    background: var(--primary);
+
+    color: white;
+
+    margin-top: 50px;
+
 }
+
+
+
+.container {
+
+    width: 90%;
+
+    max-width: 1000px;
+
+    margin: 30px auto;
+
+}
+
+
 
 .card {
+
     background: var(--card-bg);
+
     padding: 25px;
-    margin-bottom: 30px;
-    border-radius: var(--border-radius);
+
+    margin-bottom: 25px;
+
+    border-radius: 12px;
+
     box-shadow: var(--shadow);
-    border: 1px solid rgba(0,0,0,0.05);
+
 }
 
-.card h2 {
-    margin-top: 0;
-    color: var(--primary);
-    border-bottom: 2px solid #e8f5e9;
-    padding-bottom: 10px;
-}
 
-/* --- DIAPORAMA & VIDÉO (SANS JS) --- */
-.diapo-scroll {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 15px;
-    padding: 10px 0;
-    /* Cache la scrollbar sur certains navigateurs */
-    scrollbar-width: none; 
-}
 
-.diapo-scroll::-webkit-scrollbar { display: none; }
-
-.diapo-scroll img, .diapo-scroll video {
-    flex: 0 0 85%; /* Largeur de chaque élément */
-    scroll-snap-align: center;
-    border-radius: 12px;
-    height: 350px;
-    object-fit: cover;
-    background: #000;
-}
-
-/* --- BOUTONS --- */
 .btn {
+
     display: inline-block;
+
     background: var(--primary);
+
     color: white !important;
-    padding: 14px 28px;
-    border-radius: 10px;
+
+    padding: 12px 25px;
+
+    border-radius: 8px;
+
     text-decoration: none;
+
     font-weight: bold;
+
     cursor: pointer;
+
     border: none;
-    transition: transform 0.2s, background 0.3s;
-    text-align: center;
+
 }
 
-.btn:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-}
 
-/* --- MESSAGES (POSTS) --- */
+
 .post {
-    background: #ffffff;
+
+    background: #e8f5e9;
+
     padding: 20px;
+
     margin: 15px 0;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    transition: box-shadow 0.3s;
+
+    border-left: 5px solid var(--primary);
+
+    border-radius: 6px;
+
 }
 
-.post:hover { box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
 
-.post h3 { margin-top: 0; color: var(--primary); }
 
 /* --- NAVIGATION MOBILE --- */
+
 .nav-mobile {
+
     display: none; 
+
     position: fixed;
+
     bottom: 0;
+
     left: 0;
+
     width: 100%;
+
     background: white;
-    box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+
     justify-content: space-around;
+
     padding: 15px 0;
-    z-index: 2000;
+
+    z-index: 1000;
+
 }
 
-/* --- RESPONSIVE TÉLÉPHONE --- */
+
+
+.nav-item {
+
+    text-decoration: none;
+
+    color: #666;
+
+    font-weight: bold;
+
+}
+
+
+
+/* --- ADAPTATION TÉLÉPHONE --- */
+
 @media (max-width: 768px) {
-    .nav-pc { display: none; }
-    .nav-mobile { display: flex !important; }
+
+    .nav-pc { display: none; } /* Cache la barre PC sur mobile */
+
+    .nav-mobile { display: flex; } /* Affiche la barre mobile */
+
     
-    body { padding-bottom: 100px; } /* Espace pour la barre mobile */
 
-    .header { padding: 40px 15px; }
+    body {
 
-    .diapo-scroll img, .diapo-scroll video {
-        flex: 0 0 95%; /* Presque toute la largeur sur tel */
-        height: 250px;
+        padding-bottom: 80px; /* IMPORTANT : Crée l'espace pour voir le bas du forum */
+
     }
 
-    .btn { width: 100%; }
+
+
+    .container {
+
+        width: 95%;
+
+        margin-bottom: 20px;
+
+    }
+
+
+
+    .btn {
+
+        display: block;
+
+        width: 100%;
+
+        text-align: center;
+
+    }
+
 }
 
-/* --- RESPONSIVE PC --- */
+
+
+/* --- ADAPTATION PC --- */
+
 @media (min-width: 769px) {
+
+    .nav-mobile { display: none; }
+
+    
+
     #issues {
+
         display: grid;
+
         grid-template-columns: 1fr 1fr;
+
         gap: 20px;
+
     }
+
+}
+
+@media (max-width: 768px) {
+
+    body {
+
+        /* Cette ligne permet de faire défiler la page assez bas 
+
+           pour voir le contenu derrière la barre mobile */
+
+        padding-bottom: 100px !important; 
+
+    }
+
+    .nav-mobile {
+
+        display: flex !important; /* Force l'affichage sur tel */
+
+    }
+
 }
