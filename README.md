@@ -1,2 +1,0 @@
-# EcoApp
-EcoApp
