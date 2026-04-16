@@ -1,261 +1,193 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="Icone.png">
-    <title>Actualité - EcoApp</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+:root {
 
-    <style>
-        :root {
-            --primary: #2e7d32;
-            --primary-hover: #1b5e20;
-            --bg-color: #f3f7f3;
-            --card-bg: #ffffff;
-            --text-color: #333;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+    --primary: #2e7d32;
 
-        * { box-sizing: border-box; }
+    --primary-hover: #1b5e20;
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
+    --bg-color: #f3f7f3;
 
-        /* --- NAVIGATION --- */
-        .nav-pc { background: #1b5e20; text-align: center; padding: 15px 0; }
-        .nav-pc a { color: white; text-decoration: none; margin: 0 15px; font-weight: bold; position: relative; }
+    --card-bg: #ffffff;
 
-        .header { background: var(--primary); color: white; text-align: center; padding: 40px 20px; }
+    --text-color: #333;
 
-        /* --- MISE EN PAGE --- */
-        .container {
-            width: 95%;
-            max-width: 800px;
-            margin: 30px auto;
-        }
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
 
-        .card {
-            background: var(--card-bg);
-            padding: 25px;
-            margin-bottom: 25px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        /* --- MESSAGES (Flux Vertical Stable) --- */
-        #issues {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .post {
-            background: #e8f5e9;
-            padding: 25px;
-            border-left: 6px solid var(--primary);
-            border-radius: 8px;
-            width: 100%;
-            word-wrap: break-word; /* Casse les mots trop longs */
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .post h3 { margin: 0 0 15px 0; color: var(--primary); font-size: 1.4rem; }
-
-        /* --- IMAGES DANS LES MESSAGES --- */
-        .post img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin: 15px 0;
-            display: block;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
-
-        /* --- BOUTONS ET FORMULAIRE --- */
-        .btn {
-            display: inline-block;
-            background: var(--primary);
-            color: white !important;
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .btn:hover { background: var(--primary-hover); }
-
-        .badge {
-            display: none;
-            background: #ff5252;
-            color: white;
-            font-size: 11px;
-            padding: 2px 7px;
-            border-radius: 10px;
-            position: absolute;
-            top: -12px;
-            right: -15px;
-        }
-
-        /* --- MOBILE --- */
-        .nav-mobile {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            justify-content: space-around;
-            padding: 15px 0;
-            z-index: 1000;
-        }
-
-        @media (max-width: 768px) {
-            .nav-pc { display: none; }
-            .nav-mobile { display: flex; }
-            body { padding-bottom: 80px; }
-        }
-
-        .footer { text-align: center; padding: 30px; background: var(--primary); color: white; margin-top: 50px; }
-    </style>
-</head>
-<body>
-
-<nav class="nav-pc">
-    <a href="index.html">Accueil</a>
-    <a href="forum.html">Actualité <span id="badge-pc" class="badge">Nouveau</span></a>
-    <a href="objectif.html">Nos objectifs</a>
-</nav>
-
-<header class="header">
-    <h1>Actualité</h1>
-    <p>Suivez nos projets en temps réel</p>
-</header>
-
-<main class="container">
-    <section class="card">
-        <h2>Publier un message</h2>
-        <p style="font-size: 0.9rem; color: #666;">Seuls les membres autorisés peuvent publier.</p>
-        <button class="btn" onclick="ouvrirMdp()">Entrer le mot de passe</button>
-
-        <div id="zone-mdp" style="display:none; margin-top:15px;">
-            <input type="password" id="mdp" placeholder="Mot de passe" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-            <button class="btn" onclick="verifier()">Valider</button>
-        </div>
-
-        <div id="zone-publi" style="display:none; margin-top:20px;">
-            <a class="btn" href="https://github.com/valou2908/EcoApp/issues" target="_blank">➜ Créer un post sur GitHub</a>
-        </div>
-    </section>
-
-    <section class="card">
-        <h2>Messages récents</h2>
-        <div id="issues">Chargement des derniers messages...</div>
-    </section>
-</main>
-
-<footer class="footer">
-    © 2026 – No Name
-</footer>
-
-<nav class="nav-mobile">
-    <a href="index.html" style="text-decoration:none; color:black;">🏠 Accueil</a>
-    <a href="forum.html" style="text-decoration:none; color:var(--primary); font-weight:bold; position:relative;">
-        💬 Actualité <span id="badge-mobile" class="badge">!</span>
-    </a>
-    <a href="objectif.html" style="text-decoration:none; color:black;">🏆 Objectifs</a>
-</nav>
-
-<script>
-const MDP = "Eco2025/26";
-marked.setOptions({ breaks: true });
-
-// 1. Initialisation Service Worker pour les notifications
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(err => console.log("Erreur SW", err));
 }
 
-function ouvrirMdp() {
-    if ("Notification" in window && Notification.permission === "default") {
-        Notification.requestPermission();
-    }
-    document.getElementById("zone-mdp").style.display = "block";
+
+
+* { box-sizing: border-box; }
+
+
+
+body {
+
+    margin: 0;
+
+    font-family: 'Segoe UI', Monospace;
+
+    background: var(--bg-color);
+
+    color: var(--text-color);
+
 }
 
-function verifier() {
-    if (document.getElementById("mdp").value === MDP) {
-        document.getElementById("zone-publi").style.display = "block";
-        document.getElementById("zone-mdp").style.display = "none";
-    }
+
+
+/* --- MISE EN PAGE --- */
+
+.container {
+
+    width: 95%;
+
+    max-width: 800px; /* On réduit un peu la largeur pour que ce soit plus lisible */
+
+    margin: 30px auto;
+
 }
 
-async function chargerIssues() {
-    try {
-        const res = await fetch("https://api.github.com/repos/valou2908/EcoApp/issues");
-        const issues = await res.json();
-        const zone = document.getElementById("issues");
-        
-        if (!Array.isArray(issues)) return;
-        zone.innerHTML = "";
 
-        if (issues.length === 0) {
-            zone.innerHTML = "<p>Aucun message pour le moment.</p>";
-            return;
-        }
 
-        // --- GESTION DES NOTIFICATIONS ---
-        const dernierNb = localStorage.getItem('nb_issues_eco');
-        if (dernierNb !== null && issues.length > parseInt(dernierNb)) {
-            document.getElementById("badge-pc").style.display = "inline";
-            document.getElementById("badge-mobile").style.display = "inline";
+.card {
 
-            if (Notification.permission === "granted") {
-                navigator.serviceWorker.ready.then(reg => {
-                    reg.showNotification("EcoApp", {
-                        body: "Nouveau message : " + issues[0].title,
-                        icon: "Icone.png",
-                        tag: "new-issue"
-                    });
-                });
-            }
-        }
-        localStorage.setItem('nb_issues_eco', issues.length);
+    background: var(--card-bg);
 
-        // --- AFFICHAGE DES MESSAGES ---
-        issues.forEach(issue => {
-            const post = document.createElement('div');
-            post.className = 'post';
-            post.innerHTML = `
-                <h3>${issue.title}</h3>
-                <div class="content">${marked.parse(issue.body || "")}</div>
-                <hr style="border:0; border-top:1px solid #c8e6c9; margin:20px 0;">
-                <small>Par : <strong>${issue.user.login}</strong></small>
-            `;
-            zone.appendChild(post);
-        });
-    } catch (e) {
-        document.getElementById("issues").innerHTML = "Erreur de connexion aux messages.";
-    }
+    padding: 25px;
+
+    margin-bottom: 25px;
+
+    border-radius: 12px;
+
+    box-shadow: var(--shadow);
+
 }
 
-// Nettoyer les badges au bout de quelques secondes sur la page
-setTimeout(() => {
-    document.getElementById("badge-pc").style.display = "none";
-    document.getElementById("badge-mobile").style.display = "none";
-}, 6000);
 
-chargerIssues();
-setInterval(chargerIssues, 120000); // Vérifie toutes les 2 min
-</script>
-</body>
-</html>
+
+/* --- CORRECTION DES MESSAGES (Flux vertical) --- */
+
+#issues {
+
+    display: flex;
+
+    flex-direction: column; /* Force l'empilement vertical */
+
+    gap: 20px;
+
+}
+
+
+
+.post {
+
+    background: #e8f5e9;
+
+    padding: 20px;
+
+    border-left: 5px solid var(--primary);
+
+    border-radius: 8px;
+
+    width: 100%; /* Prend toute la largeur disponible */
+
+    word-wrap: break-word;
+
+    overflow: hidden;
+
+}
+
+
+
+/* --- CORRECTION DES IMAGES --- */
+
+.post img {
+
+    max-width: 100%;
+
+    height: auto;
+
+    border-radius: 8px;
+
+    margin-top: 15px;
+
+    display: block;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+}
+
+
+
+/* --- NAVIGATION --- */
+
+.nav-pc { background: #1b5e20; text-align: center; padding: 15px 0; }
+
+.nav-pc a { color: white; text-decoration: none; margin: 0 15px; font-weight: bold; }
+
+
+
+.header { background: var(--primary); color: white; text-align: center; padding: 40px 20px; }
+
+.footer { text-align: center; padding: 30px; background: var(--primary); color: white; margin-top: 50px; }
+
+
+
+.btn {
+
+    display: inline-block;
+
+    background: var(--primary);
+
+    color: white !important;
+
+    padding: 12px 25px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    border: none;
+
+    cursor: pointer;
+
+}
+
+
+
+/* --- MOBILE --- */
+
+.nav-mobile {
+
+    display: none;
+
+    position: fixed;
+
+    bottom: 0;
+
+    width: 100%;
+
+    background: white;
+
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+
+    justify-content: space-around;
+
+    padding: 15px 0;
+
+}
+
+
+
+@media (max-width: 768px) {
+
+    .nav-pc { display: none; }
+
+    .nav-mobile { display: flex; }
+
+    body { padding-bottom: 80px; }
+
+}
+
+complet stp
