@@ -110,7 +110,6 @@
             display: block;
         }
 
-        /* Style des badges de notification */
         .badge {
             display: none;
             background: #ff5252;
@@ -161,7 +160,7 @@
 
 <header class="header">
     <h1>Actualité</h1>
-    <p>Nos projets réalisés au cours de cette année et les années précédentes</p>
+    <p>Nos projets réalisés au cours de cette année</p>
 </header>
 
 <main class="container">
@@ -201,13 +200,21 @@
 
 <script>
 const MDP = "Eco2025/26";
-
 marked.setOptions({ breaks: true });
 
-// 1. Demander la permission pour les notifications système au chargement
-if ("Notification" in window && Notification.permission !== "granted") {
-    Notification.requestPermission();
+// --- 1. GESTION DU SERVICE WORKER (POUR MOBILE) ---
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+    .then(() => console.log("Service Worker prêt !"));
 }
+
+// Demander l'autorisation de notifier
+function demanderPermission() {
+    if ("Notification" in window) {
+        Notification.requestPermission();
+    }
+}
+demanderPermission();
 
 function ouvrirMdp() {
     document.getElementById("zone-mdp").style.display = "block";
@@ -235,32 +242,37 @@ async function chargerIssues() {
             return;
         }
 
-        // --- GESTION DES NOTIFICATIONS ---
+        // --- 2. LOGIQUE DE NOTIFICATION ---
         const dernierNb = localStorage.getItem('ecoapp_nb_issues');
         
-        // Si on détecte une augmentation du nombre d'issues
         if (dernierNb !== null && issues.length > parseInt(dernierNb)) {
-            // Affichage des badges visuels sur le site
+            // Afficher badges
             document.getElementById("badge-pc").style.display = "inline";
             document.getElementById("badge-mobile").style.display = "inline";
 
-            // Envoi de la notification dans le CENTRE DE NOTIFICATIONS
+            // Notification système (Panel du tel / PC)
             if (Notification.permission === "granted") {
-                new Notification("EcoApp : Nouveau message !", {
-                    body: "Un nouveau projet ou message vient d'être publié : " + issues[0].title,
-                    icon: "Icone.png"
+                const notifTitle = "EcoApp : Nouveau message !";
+                const notifOptions = {
+                    body: issues[0].title,
+                    icon: "Icone.png",
+                    vibrate: [200, 100, 200]
+                };
+                
+                // Utilise le Service Worker pour une meilleure compatibilité mobile
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.showNotification(notifTitle, notifOptions);
                 });
             }
         }
 
-        // On marque comme lu quand l'utilisateur est sur la page après 2 secondes
+        // Marquer comme lu
         setTimeout(() => {
             localStorage.setItem('ecoapp_nb_issues', issues.length);
             document.getElementById("badge-pc").style.display = "none";
             document.getElementById("badge-mobile").style.display = "none";
-        }, 2000);
+        }, 3000);
 
-        // Affichage des issues
         issues.forEach(issue => {
             const bodyHtml = marked.parse(issue.body || "Pas de texte.");
             zone.innerHTML += `
@@ -273,14 +285,12 @@ async function chargerIssues() {
             `;
         });
     } catch (e) {
-        document.getElementById("issues").innerHTML = "Erreur de connexion aux messages.";
+        document.getElementById("issues").innerHTML = "Erreur de connexion.";
     }
 }
 
-// Lancer le chargement
 chargerIssues();
-
-// Vérifier les nouveaux messages toutes les 2 minutes automatiquement
+// Vérification automatique toutes les 2 minutes
 setInterval(chargerIssues, 120000);
 </script>
 
