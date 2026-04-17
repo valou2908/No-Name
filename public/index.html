@@ -3,47 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>No name</title>
+    <title>No Name - Écologie au Collège</title>
     <link rel="stylesheet" href="style.css?v=2">
     <link rel="icon" type="image/png" href="Icone.png">
+    <style>
+        /* Styles spécifiques pour améliorer l'accueil sans toucher à ton style.css global */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin: 20px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: #000;
+        }
+        video {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .alert-box {
+            background: #fff3f3;
+            border-left: 5px solid #d32f2f;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-secondary {
+            background: #fff;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn-secondary:hover {
+            background: #f0f7f0;
+        }
+    </style>
 </head>
 <body>
 
 <nav class="nav-pc">
-    <a href="index.html">Accueil</a>
+    <a href="index.html" class="active">Accueil</a>
     <a href="forum.html">Actualité</a>
     <a href="objectif.html">Nos objectifs</a>
 </nav>
 
 <header class="header">
-    <h1>No name</h1>
+    <h1>No Name</h1>
     <p>Le site des élèves pour partager leurs idées écologiques</p>
 </header>
 
 <main class="container">
     <section class="card">
-        <h2>Bienvenue</h2>
-        <p>Découvrez les projets, messages, documents et idées des élèves autour de l’écologie.</p>
+        <h2>Bienvenue sur votre plateforme</h2>
+        <p>Découvrez les projets, messages, documents et idées des élèves pour transformer notre établissement.</p>
+        
+        <div class="alert-box">
+            <h3 style="color: #d32f2f; margin-top: 0;">📢 Message urgent</h3>
+            <p>S'il vous plaît, arrêtez de jeter vos déchets par terre ! Notre cour de récréation est notre espace de vie, ne la laissons pas se faire envahir.</p>
+        </div>
 
+        <h3>Vidéo de sensibilisation</h3>
+        <p>Regardez cette courte vidéo pour comprendre l'impact de nos gestes quotidiens :</p>
+        
+        <div class="video-container">
+            <video controls poster="miniature-video.jpg"> 
+                <source src="video1.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de cette vidéo.
+            </video>
+        </div>
 
-
-        <p>S'il vous plaît, arrêtez de jetter vos déchets par terre car notre cour de récréation est envahie par vos dechets !</p>
-        <p>Voici une petite video pour vous sensibiliser.</p>
-        <video controls width="600"> 
-    <source src="video1.mp4" type="video/mp4">
-    Votre navigateur ne supporte pas la vidéo.
-</video>
+        <div class="btn-group">
+            <a href="objectif.html" class="btn">Nos 5 objectifs</a>
+            <a href="forum.html" class="btn-secondary">Voir les actus</a>
+        </div>
     </section>
 </main>
 
 <footer class="footer">
-    © 2026 – No name
+    <p>© 2026 – No Name | Projet Éco-Citoyen</p>
 </footer>
 
 <nav class="nav-mobile">
     <a href="index.html" style="text-decoration:none; color:var(--primary); font-weight:bold;">🏠 Accueil</a>
     <a href="forum.html" style="text-decoration:none; color:black; font-weight:bold;">💬 Actualité</a>
-    <a href="objectif.html" style="text-decoration:none; color:black; font-weight:bold;">🏆 Nos objectifs</a>
+    <a href="objectif.html" style="text-decoration:none; color:black; font-weight:bold;">🏆 Objectifs</a>
 </nav>
 
 </body>
