@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mise à jour - No Name</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="icon" type="image/png" href="Icone.png">
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --bg-color: #f3f7f3;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        .icon-box {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .footer-text {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="icon-box">🌱</div>
+    <h1>Mise à jour en cours</h1>
+    <p>Nous améliorons <strong>No Name</strong>.</p>
+    
+    <div class="loader"></div>
+    
+    <p>Le site sera de retour à la fin des vacances. Merci de votre patience !</p>
+
+<div id="admin-section" style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 30px; padding: 20px;">
+    
+    <p style="font-size: 0.9rem; color: #666; margin: 0;">
+        Réservé aux membres des éco-délégués de H.G.
+    </p>
+    
+    <button class="btn" id="btn-admin" onclick="ouvrirMdp()" style="margin-top: 10px;">
+        Accéder en Mode Administrateur
+    </button>
+    
+    <div id="zone-mdp" style="display:none; margin-top:15px; flex-direction: column; align-items: center; gap: 10px;">
+        <input type="password" id="mdp" placeholder="Code d'accès" style="padding:10px; border-radius:8px; border:1px solid #ddd; width: 200px; text-align: center;">
+        <button class="btn" onclick="verifier()">Accéder</button>
+    </div>
+    
+<div id="zone-publi" style="display:none; margin-top:20px; flex-direction: column; align-items: center; gap: 15px;">
+    
+    <a class="btn" href="https://github.com/valou2908/EcoApp/issues" target="_blank" style="text-decoration: none;">
+        Ajouter un message
+    </a>
+
+    <a class="btn" href="https://no-name-sigma.vercel.app/Index_old" target="_blank" style="text-decoration: none;">
+        Voir l'aperçu (Preview)
+    </a>
+    
+</div>
+</div>
+
+        <script>
+            const SECRET = "RWNvMjAyNS8yNg=="; 
+            marked.setOptions({ breaks: true, gfm: true });
+
+            function ouvrirMdp() {
+    document.getElementById("zone-mdp").style.display = "flex";
+    document.getElementById("btn-admin").style.display = "none";
+}
+
+            function verifier() {
+                const input = document.getElementById("mdp").value;
+                if (btoa(input) === SECRET) {
+                       document.getElementById("zone-publi").style.display = "block";
+                     document.getElementById("zone-mdp").style.display = "none";
+                     document.getElementById('zone-publi').style.display = 'flex';
+                 } else { alert("Code incorrect"); }
+                }
+</script>
+    <div class="footer-text">
+        © 2026 – Éco-délégués Hippolyte Rémy
+    </div>
+</div>
+
+</body>
+</html>
