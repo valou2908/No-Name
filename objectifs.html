@@ -1,0 +1,139 @@
+<!DOCTYPE html> 
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les objectifs</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="icon" type="image/png" href="icone.png">
+</head>
+<body>
+
+<nav class="nav-pc">
+    <a href="index.html">Accueil</a>
+    <a href="actualite.html">Actualité <span id="badge-pc" class="badge" style="display:none;">NOUVEAU</span></a>
+    <a href="objectifs.html" class="active">Les objectifs</a>
+    <a href="noussommes.html">Qui sommes Nous ?</a>
+</nav>
+
+<header class="header">
+    <h1>Les objectifs</h1>
+    <p>Découvrez tous les objectifs des éco-délégués</p>
+</header>
+<main class="container">
+    <section class="card">
+        <h2>Bienvenue, voici les objectifs des éco-délégués de 2025-2026</h2>
+        <p>Découvrez les objectifs globaux des élèves éco-délégués</p>
+        
+        <div class="onu-box">
+            <h3>🪴 Au collège, nous nous basons sur les 17 objectifs de l'ONU</h3>
+            <p>Ces 17 objectifs servent au bien-être de la nature et de vous, les élèves.</p>
+            <div class="img-container">
+                <img src="picture/objectifsONU.png" alt="Les 17 objectifs de l'ONU">
+            </div>
+        </div>
+
+        <h2 class="title-green">Voici les objectifs des élèves de cette année :</h2>
+
+        <div class="objectifs-grid">
+            <div class="obj-card main-obj">
+                <h3>🚮 Réduction des déchets</h3>
+                <p>Cette année, nous avons contribué au ramassage des déchets de la cour de récréation.</p>
+                <p>Nous avons aussi mis en place un diaporama que vous pouvez retrouver sur <a href="index.html">l'Accueil.</a></p>
+                <img src="picture/pdgrdd.jpg" alt="Photo de groupe">
+            </div>
+
+            <div class="obj-side-column">
+                <div class="obj-card">
+                    <h3>🪴 Plus de plantes</h3>
+                    <p>Nous avons planté de nouvelles variétés. Elles ont été protégées le temps que les racines se fortifient.</p>
+                </div>
+                <div class="obj-card">
+                    <h3>🌐 Création d'un site web</h3>
+                    <p>Ce site sert à informer et sensibiliser pour un collège moins polluant.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<style>
+/* --- Styles spécifiques aux objectifs --- */
+
+.title-green {
+    color: #128305;
+    margin: 30px 0 15px 0;
+    font-size: 1.1rem;
+}
+
+.onu-box {
+    background: #e2fdcd;
+    border-left: 5px solid #49a407;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.onu-box h3 { color: #1e8f0f; margin-top: 0; font-size: 1.1rem; }
+
+.img-container { display: flex; justify-content: center; margin-top: 15px; }
+.img-container img { max-width: 100%; height: auto; border-radius: 5px; }
+
+/* La Grille */
+.objectifs-grid {
+    display: flex;
+    flex-direction: row; /* Côte à côte sur PC */
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.obj-card {
+    background: #e2fdcd;
+    border-left: 5px solid #49a407;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.obj-card h3 { color: #1e8f0f; margin-top: 0; font-size: 1.1rem; }
+.obj-card img { max-width: 100%; height: auto; border-radius: 5px; margin-top: 10px; }
+.obj-card a { color: #128305; font-weight: bold; text-decoration: none; }
+
+.main-obj { flex: 1.5; }
+.obj-side-column { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+
+/* --- ADAPTATION MOBILE --- */
+@media (max-width: 768px) {
+    .objectifs-grid {
+        flex-direction: column; /* On empile tout sur téléphone */
+    }
+    
+    .main-obj, .obj-side-column {
+        width: 100%;
+    }
+}
+</style>
+
+<nav class="nav-mobile">
+    <a href="index.html">🏠<br>Accueil</a>
+    <a href="actualite.html">💬<br>Actualité <span class="badge" style="display:none;">!</span></a>
+    <a href="objectifs.html" class="active">🏆<br>Objectifs</a>
+    <a href="noussommes.html">👥<br>Qui sommes nous</a>
+</nav>
+
+<script>
+async function verifierBadge() {
+    try {
+        const res = await fetch("https://api.github.com/repos/valou2908/EcoApp/issues?per_page=10");
+        const issues = await res.json();
+        if (Array.isArray(issues)) {
+            const dernierNb = localStorage.getItem('nb_issues_eco');
+            if (dernierNb !== null && issues.length > parseInt(dernierNb)) {
+                document.querySelectorAll('.badge').forEach(b => b.style.display = 'inline-block');
+            }
+        }
+    } catch (e) { console.log("Erreur badge"); }
+}
+window.onload = verifierBadge;
+</script>
+</body>
+</html>

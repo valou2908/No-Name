@@ -1,0 +1,67 @@
+<!DOCTYPE html> 
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="icon" type="image/png" href="icone.png">
+</head>
+<body>
+
+<nav class="nav-pc">
+    <a href="index.html" class="active">Accueil</a>
+    <a href="actualite.html">Actualité <span id="badge-pc" class="badge" style="display:none;">NOUVEAU</span></a>
+    <a href="objectifs.html">Les objectifs</a>
+    <a href="noussommes.html">Qui sommes Nous ?</a>
+</nav>
+
+<header class="header">
+    <h1>No Name</h1>
+    <p>Partage des créations écologiques des éco-délégués</p>
+</header>
+
+<main class="container">
+    <section class="card">
+        <h2>Bienvenue sur votre plateforme</h2>
+        <p>Découvrez les projets des élèves pour transformer notre établissement.</p>
+        
+        <div style="background: #fff3f3; border-left: 5px solid #d32f2f; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #d32f2f; margin-top: 0; font-size: 1.1rem;">📢 Message urgent</h3>
+            <p style="margin: 0;">Merci de respecter notre cour de récréation en ne jetant pas vos déchets au sol.</p>
+        </div>
+
+        <h3>Vidéo de la cour :</h3>
+        <div style="border-radius: 15px; overflow: hidden; box-shadow: var(--shadow); background: #000; margin-top: 15px;">
+            <video controls style="width: 100%;"> 
+                <source src="./video/diapodechet.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de cette vidéo.
+            </video>
+        </div>
+    </section>
+</main>
+
+<nav class="nav-mobile">
+    <a href="index.html" class="active">🏠<br>Accueil</a>
+    <a href="actualite.html">💬<br>Actualité <span class="badge" style="display:none;">!</span></a>
+    <a href="objectifs.html">🏆<br>Objectifs</a>
+    <a href="noussommes.html">👥<br>Qui sommes nous</a>
+</nav>
+
+<script>
+async function verifierBadge() {
+    try {
+        const res = await fetch("https://api.github.com/repos/valou2908/EcoApp/issues?per_page=10");
+        const issues = await res.json();
+        if (Array.isArray(issues)) {
+            const dernierNb = localStorage.getItem('nb_issues_eco');
+            if (dernierNb !== null && issues.length > parseInt(dernierNb)) {
+                document.querySelectorAll('.badge').forEach(b => b.style.display = 'inline-block');
+            }
+        }
+    } catch (e) { console.log("Erreur badge"); }
+}
+window.onload = verifierBadge;
+</script>
+</body>
+</html>

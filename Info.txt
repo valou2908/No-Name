@@ -1,0 +1,10 @@
+Bonjour voici tout ce qu'il y a savoir sur la version Beta 0.2.2 du site :
+
+- Rajout de l'onglet Nos objectifs (fixe du bug d'affichage, relook de la page, et adaptation du mode mobile/PC) ;
+- Ajout de l'onglet "Qui somme nous" ; 
+- Fix du bug de notification ;
+- Nouvelle mécanique du bouton actualité (ajout soit d'un bouton "!" ou "nouveau" si il y a une notification ;
+- Correction des Faute d'orthographe ;
+- Création des fichier "Picture" et "Video" pour une meilleure organisation du site.
+
+
