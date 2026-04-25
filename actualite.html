@@ -28,6 +28,36 @@
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes loading { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+        /* Style du bandeau de notification */
+        #notif-banner {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            background: #333;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-size: 0.9rem;
+        }
+        .btn-notif {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -77,52 +107,49 @@
 </nav>
 
 <script>
-// 1. Enregistrement du Service Worker
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('SW enregistré !'))
-            .catch(err => console.log('Erreur SW:', err));
-    });
-}
-
-// 2. Fonction de notification améliorée (Compatible Mobile/Desktop)
-async function demanderPermissionNotif() {
-    if (!("Notification" in window)) {
-        alert("Votre navigateur ne supporte pas les notifications.");
-        return;
-    }
-
-    try {
-        const permission = await Notification.requestPermission();
-        
-        if (permission === "granted") {
-            const options = {
-                body: "Notifications activées pour les actualités !",
-                icon: "Picture/icone.png",
-                badge: "Picture/icone.png",
-                vibrate: [100, 50, 100]
-            };
-
-            // Sur mobile, on utilise obligatoirement le Service Worker
-            if ('serviceWorker' in navigator) {
-                const reg = await navigator.serviceWorker.ready;
-                reg.showNotification("Eco-Délégués H.R.", options);
-            } else {
-                new Notification("Eco-Délégués H.R.", options);
-            }
-        } else if (permission === "denied") {
-            alert("Notifications bloquées. Veuillez les réactiver dans les paramètres de votre navigateur.");
-        }
-    } catch (err) {
-        console.error("Erreur notification:", err);
-    }
-}
-
-// 3. Variables et Configuration
+// --- CONFIGURATION ---
 const SECRET = "RWNvMjAyNS8yNg=="; // "Eco2025/26"
 marked.setOptions({ breaks: true, gfm: true });
 
+// 1. GESTION DES NOTIFICATIONS (Arrière-plan et chargement)
+async function initNotifications() {
+    if (!("Notification" in window)) return;
+
+    // Si la permission n'est pas encore demandée, on affiche le bandeau
+    if (Notification.permission === "default") {
+        creerBandeauInvitation();
+    }
+}
+
+function creerBandeauInvitation() {
+    const banner = document.createElement('div');
+    banner.id = "notif-banner";
+    banner.innerHTML = `
+        <span>Recevoir les alertes ?</span>
+        <div style="display:flex;">
+            <button class="btn-notif" onclick="accepterNotif()">Activer</button>
+            <button onclick="this.parentElement.parentElement.remove()" style="background:none; border:none; color:#aaa; margin-left:10px; cursor:pointer;">Plus tard</button>
+        </div>
+    `;
+    document.body.appendChild(banner);
+}
+
+async function accepterNotif() {
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+        if ('serviceWorker' in navigator) {
+            const reg = await navigator.serviceWorker.ready;
+            reg.showNotification("Eco-Délégués H.R.", {
+                body: "Vous recevrez désormais nos actualités !",
+                icon: "Picture/icone.png",
+                vibrate: [100, 50, 100]
+            });
+        }
+    }
+    document.getElementById("notif-banner").remove();
+}
+
+// 2. LOGIQUE D'ADMINISTRATION
 function ouvrirMdp() {
     document.getElementById("zone-mdp").style.display = "flex";
     document.getElementById("btn-admin").style.display = "none";
@@ -133,15 +160,12 @@ function verifier() {
     if (btoa(input) === SECRET) {
         document.getElementById("zone-publi").style.display = "block";
         document.getElementById("zone-mdp").style.display = "none";
-        
-        // On déclenche la demande après une action utilisateur (le clic sur "Accéder")
-        demanderPermissionNotif();
     } else { 
         alert("Code incorrect"); 
     }
 }
 
-// 4. Chargement des articles GitHub
+// 3. CHARGEMENT DES ARTICLES GITHUB
 async function chargerIssues() {
     const zone = document.getElementById("issues");
     try {
@@ -171,7 +195,6 @@ async function chargerIssues() {
             zone.appendChild(post);
         });
 
-        // Masquer les badges une fois lu
         localStorage.setItem('nb_issues_eco', issues.length);
         document.querySelectorAll('.badge').forEach(b => b.style.display = 'none');
 
@@ -180,7 +203,18 @@ async function chargerIssues() {
     }
 }
 
-window.onload = chargerIssues;
+// 4. INITIALISATION AU CHARGEMENT
+window.onload = () => {
+    // Enregistrement SW
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').then(() => {
+            console.log("Service Worker Actif");
+        });
+    }
+
+    chargerIssues();
+    initNotifications();
+};
 </script>
 </body>
 </html>
